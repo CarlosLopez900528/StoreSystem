@@ -20,8 +20,8 @@ public class CustomerController {
     }
 
     @GetMapping("/{idCustomer}")
-    public List<Customer> getCustomerById(@PathVariable("idCustomer") Integer idCustomer) throws Exception {
-        return customerService.listAllCustomers();
+    public Customer getCustomerById(@PathVariable("idCustomer") Integer idCustomer) throws Exception {
+        return customerService.listCustomersById(idCustomer);
     }
 
     @PostMapping
