@@ -2,6 +2,8 @@ package com.example.store.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "tbl_customer")
@@ -14,8 +16,8 @@ public class Customer {
     private String phone;
     private String email;
     @OneToOne
-    @JoinColumn(name = "idShippingAddress", nullable = false, foreignKey = @ForeignKey(name = "FK_customer_shipping_address"))
-    private ShippingAddress shippingAddress;
+    @JoinColumn(name = "idAddress", nullable = false, foreignKey = @ForeignKey(name = "FK_customer_address"))
+    private Address address;
 
     public Integer getIdCustomer() {
         return idCustomer;
@@ -49,11 +51,24 @@ public class Customer {
         this.email = email;
     }
 
-    public ShippingAddress getShippingAddress() {
-        return shippingAddress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setShippingAddress(ShippingAddress shippingAddress) {
-        this.shippingAddress = shippingAddress;
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(phone, customer.phone) && Objects.equals(email, customer.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(phone, email);
     }
 }

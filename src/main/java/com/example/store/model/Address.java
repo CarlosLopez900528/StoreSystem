@@ -3,22 +3,31 @@ package com.example.store.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tbl_shipping_address")
-public class ShippingAddress {
+@Table(name = "tbl_address")
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idShippingAddress;
+    private Integer idAddress;
     private String address;
     private String country;
     private String city;
     private String state;
+    private String zipCode;
 
-    public Integer getIdShippingAddress() {
-        return idShippingAddress;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setIdShippingAddress(Integer idShippingAddress) {
-        this.idShippingAddress = idShippingAddress;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public Integer getIdAddress() {
+        return idAddress;
+    }
+
+    public void setIdAddress(Integer idAddress) {
+        this.idAddress = idAddress;
     }
 
     public String getAddress() {

@@ -3,8 +3,10 @@ package com.example.store.controller;
 import com.example.store.dto.CustomerDTO;
 import com.example.store.exeption.ModelNotFoundException;
 import com.example.store.model.Customer;
+import com.example.store.model.Address;
 import com.example.store.service.ICustomerService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +43,11 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) throws Exception {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         Customer customer = mapper.map(customerDTO, Customer.class);
-        return new ResponseEntity<>(mapper.map(customerService.save(customer), CustomerDTO.class), HttpStatus.CREATED);
+        Address address = mapper.map(customerDTO, Address.class);
+        CustomerDTO obj = mapper.map(customerService.registrarTransactional(customer, address), CustomerDTO.class);
+        return new ResponseEntity<>(obj, HttpStatus.CREATED);
     }
 
     @PutMapping
