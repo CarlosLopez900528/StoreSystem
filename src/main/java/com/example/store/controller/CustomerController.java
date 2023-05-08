@@ -1,11 +1,17 @@
 package com.example.store.controller;
 
+import com.example.store.dto.CustomerDTO;
+import com.example.store.exeption.ModelNotFoundException;
 import com.example.store.model.Customer;
 import com.example.store.service.ICustomerService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
@@ -14,33 +20,48 @@ public class CustomerController {
     @Autowired
     private ICustomerService customerService;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @GetMapping("")
-    public List<Customer> getAllCustomers() throws Exception {
-        return customerService.listAllCustomers();
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() throws Exception {
+        return new ResponseEntity<>(customerService.listAll()
+                .stream()
+                .map(p -> mapper.map(p, CustomerDTO.class)).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{idCustomer}")
-    public Customer getCustomerById(@PathVariable("idCustomer") Integer idCustomer) throws Exception {
-        return customerService.listCustomersById(idCustomer);
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("idCustomer") Integer idCustomer) throws Exception {
+        Customer customer = customerService.listById(idCustomer);
+        if (customer == null) {
+            throw new ModelNotFoundException("ID NOT FOUND " + idCustomer);
+        }
+        return new ResponseEntity<>(mapper.map(customer, CustomerDTO.class), HttpStatus.OK);
     }
 
     @PostMapping
-    public Customer saveCustomer(@RequestBody Customer customer) throws Exception {
-        return customerService.saveCustomer(customer);
+    public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) throws Exception {
+        Customer customer = mapper.map(customerDTO, Customer.class);
+        return new ResponseEntity<>(mapper.map(customerService.save(customer), CustomerDTO.class), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idCustomer}")
-    public Customer updateCustomer(@PathVariable("idCustomer") Integer idCustomer, @RequestBody Customer customer) throws Exception {
-        Customer c = customerService.listCustomersById(idCustomer);
-        if (c != null) {
-            customer.setIdCustomer(idCustomer);
-            return customerService.updateCustomer(customer);
+    @PutMapping
+    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO) throws Exception {
+        Customer customer = customerService.listById(customerDTO.getIdCustomer());
+        if (customer == null) {
+            throw new ModelNotFoundException("ID NOT FOUND " + customerDTO.getIdCustomer());
         }
-        return null;
+        customerDTO.setIdCustomer(customer.getIdCustomer());
+        return new ResponseEntity<>(mapper.map(customerService.update(customer), CustomerDTO.class), HttpStatus.OK);
     }
 
     @DeleteMapping("/{idCustomer}")
-    public void deleteCustomerById(@PathVariable("idCustomer") Integer idCustomer) throws Exception {
-        customerService.deleteCustomer(idCustomer);
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable("idCustomer") Integer idCustomer) throws Exception {
+        Customer customer = customerService.listById(idCustomer);
+        if (customer == null) {
+            throw new ModelNotFoundException("ID NOT FOUND " + idCustomer);
+        }
+        customerService.delete(idCustomer);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

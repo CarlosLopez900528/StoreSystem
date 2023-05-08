@@ -1,21 +1,10 @@
-package com.example.store.model;
+package com.example.store.dto;
 
-import jakarta.persistence.*;
-
-
-@Entity
-@Table(name = "tbl_customer")
-public class Customer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CustomerDTO {
     private Integer idCustomer;
     private String name;
     private String phone;
     private String email;
-    @OneToOne
-    @JoinColumn(name = "idShippingAddress", nullable = false, foreignKey = @ForeignKey(name = "FK_customer_shipping_address"))
-    private ShippingAddress shippingAddress;
 
     public Integer getIdCustomer() {
         return idCustomer;
@@ -47,13 +36,5 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public ShippingAddress getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(ShippingAddress shippingAddress) {
-        this.shippingAddress = shippingAddress;
     }
 }

@@ -1,15 +1,8 @@
-package com.example.store.model;
-
-
-import jakarta.persistence.*;
+package com.example.store.dto;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "tbl_product")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductDTO {
     private Integer idProduct;
     private String description;
     private BigDecimal price;
