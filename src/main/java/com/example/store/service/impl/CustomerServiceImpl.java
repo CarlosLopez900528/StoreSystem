@@ -27,9 +27,9 @@ public class CustomerServiceImpl extends CRUDImpl<Customer, Integer> implements 
 
     @Transactional
     @Override
-    public Customer registrarTransactional(Customer customer, Address address) throws Exception {
+    public Customer transactionalRecord(Customer customer, Address address, String type) throws Exception {
         int count = customerRepository.findByPhoneAndEmail(customer.getPhone(),customer.getEmail());
-        if (count>0){
+        if (count>0 && type == "CREATED"){
             throw new ModelNotFoundException("THE CUSTOMER IS ALREADY REGISTERED !!!");
         }
         Address s = addressRepository.save(address);

@@ -15,7 +15,7 @@ public class Customer {
     private String name;
     private String phone;
     private String email;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "idAddress", nullable = false, foreignKey = @ForeignKey(name = "FK_customer_address"))
     private Address address;
 

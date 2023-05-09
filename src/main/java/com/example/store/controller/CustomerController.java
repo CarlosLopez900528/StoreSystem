@@ -21,7 +21,6 @@ public class CustomerController {
 
     @Autowired
     private ICustomerService customerService;
-
     @Autowired
     private ModelMapper mapper;
 
@@ -46,18 +45,24 @@ public class CustomerController {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         Customer customer = mapper.map(customerDTO, Customer.class);
         Address address = mapper.map(customerDTO, Address.class);
-        CustomerDTO obj = mapper.map(customerService.registrarTransactional(customer, address), CustomerDTO.class);
+        CustomerDTO obj = mapper.map(customerService.transactionalRecord(customer, address, "CREATED"), CustomerDTO.class);
         return new ResponseEntity<>(obj, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO) throws Exception {
-        Customer customer = customerService.listById(customerDTO.getIdCustomer());
+    @PutMapping("/{idCustomer}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("idCustomer") Integer idCustomer, @RequestBody CustomerDTO customerDTO) throws Exception {
+        Customer customer = customerService.listById(idCustomer);
+
         if (customer == null) {
             throw new ModelNotFoundException("ID NOT FOUND " + customerDTO.getIdCustomer());
         }
+
         customerDTO.setIdCustomer(customer.getIdCustomer());
-        return new ResponseEntity<>(mapper.map(customerService.update(customer), CustomerDTO.class), HttpStatus.OK);
+        customerDTO.getAddress().setIdAddress(customer.getAddress().getIdAddress());
+        Address address = customerDTO.getAddress();
+        Customer newCustomer = mapper.map((customerDTO),Customer.class);
+        CustomerDTO obj = mapper.map(customerService.transactionalRecord(newCustomer, address, "UPDATE"), CustomerDTO.class);
+        return new ResponseEntity<>(obj, HttpStatus.OK);
     }
 
     @DeleteMapping("/{idCustomer}")

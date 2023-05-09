@@ -1,25 +1,18 @@
-package com.example.store.model;
+package com.example.store.dto;
 
-
-import jakarta.persistence.*;
+import com.example.store.model.Customer;
+import com.example.store.model.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "tbl_order")
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class OrderDTO {
     private Integer idOrder;
     private String orderNumber;
     private LocalDateTime date;
-    @OneToOne
-    @JoinColumn(name = "idCustomer", nullable = false, foreignKey = @ForeignKey(name = "FK_order_customer"))
     private Customer customer;
     private String paymentType;
-    @OneToMany(mappedBy = "idProduct")
     private List<Product> listProducts;
 
     private BigDecimal totalOrderValue;

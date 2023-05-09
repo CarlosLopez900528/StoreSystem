@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,14 +45,15 @@ public class ProductsController {
         return new ResponseEntity<>(mapper.map(productService.save(product), ProductDTO.class), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) throws Exception {
-        Product product = productService.listById(productDTO.getIdProduct());
+    @PutMapping("/{idProduct}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("idProduct") Integer idProduct,@RequestBody ProductDTO productDTO) throws Exception {
+        Product product = productService.listById(idProduct);
         if (product == null) {
             throw new ModelNotFoundException("ID NOT FOUND " + productDTO.getIdProduct());
         }
         productDTO.setIdProduct(product.getIdProduct());
-        return new ResponseEntity<>(mapper.map(productService.update(product), ProductDTO.class), HttpStatus.OK);
+        Product newProduct = mapper.map((productDTO), Product.class);
+        return new ResponseEntity<>(mapper.map(productService.update(newProduct), ProductDTO.class), HttpStatus.OK);
     }
 
     @DeleteMapping("/{idProduct}")

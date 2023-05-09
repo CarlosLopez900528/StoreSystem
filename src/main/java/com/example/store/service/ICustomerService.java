@@ -6,6 +6,6 @@ import com.example.store.model.Address;
 
 public interface ICustomerService extends ICRUD<Customer, Integer> {
 
-    Customer registrarTransactional(Customer customer, Address address) throws Exception;
+    Customer transactionalRecord(Customer customer, Address address, String type) throws Exception;
 
 }
