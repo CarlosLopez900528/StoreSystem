@@ -5,10 +5,17 @@ This is a project with this steps:
 3. Search customers, products, and orders 
 4. Search order details
 
-IDE: intelliJ
-SprinBoot: 3.0.6
-Java: 17.0.2
-Gradle: 7.6
+** TOOLS **
+
+- IDE: intelliJ
+
+- SprinBoot: 3.0.6
+
+- Java: 17.0.2
+
+- Gradle: 7.6
+
+** CONSIDERATIONS **
 
 The file named "StoreSystem.postman_collection.json" is attached to the project resource path, in which the urls to consume the services are versioned, this can be imported into Postman.
 
