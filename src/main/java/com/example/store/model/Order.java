@@ -2,81 +2,26 @@ package com.example.store.model;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @Entity
-@Table(name = "tbl_order")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idOrder;
+    private Integer id;
     private String orderNumber;
     private LocalDateTime date;
     @OneToOne
-    @JoinColumn(name = "idCustomer", nullable = false, foreignKey = @ForeignKey(name = "FK_order_customer"))
+    @JoinColumn(name = "id", nullable = false, foreignKey = @ForeignKey(name = "FK_orders_customers"))
     private Customer customer;
     private String paymentType;
-    @OneToMany(mappedBy = "idProduct")
+    @OneToMany(mappedBy = "id")
     private List<Product> listProducts;
-
     private BigDecimal totalOrderValue;
-
-    public BigDecimal getTotalOrderValue() {
-        return totalOrderValue;
-    }
-
-    public void setTotalOrderValue(BigDecimal totalOrderValue) {
-        this.totalOrderValue = totalOrderValue;
-    }
-
-    public Integer getIdOrder() {
-        return idOrder;
-    }
-
-    public void setIdOrder(Integer idOrder) {
-        this.idOrder = idOrder;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public List<Product> getListProducts() {
-        return listProducts;
-    }
-
-    public void setListProducts(List<Product> listProducts) {
-        this.listProducts = listProducts;
-    }
 }

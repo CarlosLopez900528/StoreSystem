@@ -54,11 +54,11 @@ public class CustomerController {
         Customer customer = customerService.listById(idCustomer);
 
         if (customer == null) {
-            throw new ModelNotFoundException("ID NOT FOUND " + customerDTO.getIdCustomer());
+            throw new ModelNotFoundException("ID NOT FOUND " + customerDTO.getId());
         }
 
-        customerDTO.setIdCustomer(customer.getIdCustomer());
-        customerDTO.getAddress().setIdAddress(customer.getAddress().getIdAddress());
+        customerDTO.setId(customer.getId());
+        customerDTO.getAddress().setId(customer.getAddress().getId());
         Address address = customerDTO.getAddress();
         Customer newCustomer = mapper.map((customerDTO),Customer.class);
         CustomerDTO obj = mapper.map(customerService.transactionalRecord(newCustomer, address, "UPDATE"), CustomerDTO.class);

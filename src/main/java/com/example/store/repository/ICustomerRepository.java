@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
 
-    @Query(value = "SELECT count(*) FROM tbl_customer where phone=:phone or email=:email", nativeQuery = true)
+    @Query(value = "SELECT count(*) FROM customers where phone=:phone or email=:email", nativeQuery = true)
     Integer findByPhoneAndEmail(@Param("phone") String phone, @Param("email") String email);
 
 }

@@ -49,9 +49,9 @@ public class ProductsController {
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable("idProduct") Integer idProduct,@RequestBody ProductDTO productDTO) throws Exception {
         Product product = productService.listById(idProduct);
         if (product == null) {
-            throw new ModelNotFoundException("ID NOT FOUND " + productDTO.getIdProduct());
+            throw new ModelNotFoundException("ID NOT FOUND " + productDTO.getId());
         }
-        productDTO.setIdProduct(product.getIdProduct());
+        productDTO.setId(product.getId());
         Product newProduct = mapper.map((productDTO), Product.class);
         return new ResponseEntity<>(mapper.map(productService.update(newProduct), ProductDTO.class), HttpStatus.OK);
     }

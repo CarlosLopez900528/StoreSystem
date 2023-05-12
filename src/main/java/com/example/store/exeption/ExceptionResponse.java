@@ -1,7 +1,10 @@
 package com.example.store.exeption;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
 public class ExceptionResponse {
 
     public ExceptionResponse() {
@@ -17,27 +20,4 @@ public class ExceptionResponse {
     private String message;
     private String detail;
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
 }

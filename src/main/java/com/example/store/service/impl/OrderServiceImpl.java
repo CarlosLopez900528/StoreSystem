@@ -52,8 +52,8 @@ public class OrderServiceImpl extends CRUDImpl<Order, Integer> implements IOrder
         orderRepository.save(order);
         for (int i = 0; i < listProduct.size(); i++) {
 
-            Product p = productService.listById(listProduct.get(i).getIdProduct());
-            orderProductRepository.saveOrderProduct(order.getIdOrder(), listProduct.get(i).getIdProduct());
+            Product p = productService.listById(listProduct.get(i).getId());
+            orderProductRepository.saveOrderProduct(order.getId(), listProduct.get(i).getId());
             totalOrderValue = totalOrderValue.add(p.getPrice());
             List<Product> products = order.getListProducts();
             products.forEach(product -> {
