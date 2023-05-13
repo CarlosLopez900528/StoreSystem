@@ -27,7 +27,6 @@ public class Product {
     private String description;
     private BigDecimal price;
     private Long weight;
-    private Long quantity;
 
     @Override
     public boolean equals(Object o) {

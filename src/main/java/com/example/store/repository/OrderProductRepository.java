@@ -16,4 +16,7 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Inte
 
     @Query(value = "SELECT id_product FROM orders_products where id_order=:idOrder", nativeQuery = true)
     List<Integer> findIdProductByOrder(@Param("idOrder") Integer idOrder);
+
+    @Query(value = "SELECT * FROM orders_products where id_order=:idOrder", nativeQuery = true)
+    List<OrderProduct> findOrderProductByIdOrder(@Param("idOrder") Integer idOrder);
 }

@@ -25,7 +25,7 @@ public class OrderController {
 
     @GetMapping("")
     public ResponseEntity<List<OrderDTO>> getAllOrders() throws Exception {
-        List<OrderDTO> orderDTOs = orderService.listAll().stream()
+        List<OrderDTO> orderDTOs = orderService.getAllOrders().stream()
             .map(o -> mapper.map(o, OrderDTO.class))
             .toList();
         return ResponseEntity.status(HttpStatus.OK).body(orderDTOs);

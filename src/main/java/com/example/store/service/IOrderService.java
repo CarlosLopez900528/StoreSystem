@@ -12,4 +12,6 @@ public interface IOrderService extends ICRUD<Order, Integer>{
 
     Order getOrderById(Integer idOrder) throws Exception;
 
+    List<Order> getAllOrders() throws Exception;
+
 }
