@@ -1,7 +1,6 @@
 package com.example.store.dto;
 
 import com.example.store.model.Customer;
-import com.example.store.model.Product;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,6 +14,6 @@ public class OrderDTO {
     private LocalDateTime date;
     private Customer customer;
     private String paymentType;
-    private List<Product> listProducts;
+    private List<ProductRequest> listProducts;
     private BigDecimal totalOrderValue;
 }

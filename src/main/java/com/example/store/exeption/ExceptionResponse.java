@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 @Data
 public class ExceptionResponse {
 
-    public ExceptionResponse() {
-    }
-
     public ExceptionResponse(LocalDateTime date, String message, String detail) {
         this.date = date;
         this.message = message;

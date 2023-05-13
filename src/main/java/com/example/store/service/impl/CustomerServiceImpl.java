@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerServiceImpl extends CRUDImpl<Customer, Integer> implements ICustomerService {
 
+    public static final String THE_CUSTOMER_IS_ALREADY_REGISTERED = "THE CUSTOMER IS ALREADY REGISTERED!!!";
+    public static final String CREATED = "CREATED";
     @Autowired
     private ICustomerRepository customerRepository;
 
@@ -28,12 +30,12 @@ public class CustomerServiceImpl extends CRUDImpl<Customer, Integer> implements 
     @Transactional
     @Override
     public Customer transactionalRecord(Customer customer, Address address, String type) throws Exception {
-        int count = customerRepository.findByPhoneAndEmail(customer.getPhone(),customer.getEmail());
-        if (count>0 && type == "CREATED"){
-            throw new ModelNotFoundException("THE CUSTOMER IS ALREADY REGISTERED !!!");
+        int count = customerRepository.findByPhoneAndEmail(customer.getPhone(), customer.getEmail());
+        if (count > 0 && CREATED.equals(type)) {
+            throw new ModelNotFoundException(THE_CUSTOMER_IS_ALREADY_REGISTERED);
         }
-        Address s = addressRepository.save(address);
-        customer.setAddress(s);
+        Address savedAddress = addressRepository.save(address);
+        customer.setAddress(savedAddress);
         return customerRepository.save(customer);
     }
 }

@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class OrderListProductDTO {
     private OrderDTO orderDTO;
-    private List<ProductDTO> productDTOList;
+    private List<ProductRequest> productDTOList;
 }

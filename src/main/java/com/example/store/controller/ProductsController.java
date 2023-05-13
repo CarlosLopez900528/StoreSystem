@@ -1,6 +1,7 @@
 package com.example.store.controller;
 
 import com.example.store.dto.ProductDTO;
+import com.example.store.dto.ProductRequest;
 import com.example.store.exeption.ModelNotFoundException;
 import com.example.store.model.Product;
 import com.example.store.service.IProductService;
@@ -11,12 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
 
+    public static final String ID_NOT_FOUND = "ID NOT FOUND ";
     @Autowired
     private IProductService productService;
 
@@ -25,45 +26,53 @@ public class ProductsController {
 
     @GetMapping("")
     public ResponseEntity<List<ProductDTO>> getAllProducts() throws Exception {
-        return new ResponseEntity<>(productService.listAll()
-                .stream()
-                .map(p -> mapper.map(p, ProductDTO.class)).collect(Collectors.toList()), HttpStatus.OK);
+        List<ProductDTO> productDTOs = productService.listAll().stream()
+            .map(p -> mapper.map(p, ProductDTO.class))
+            .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(productDTOs);
     }
 
     @GetMapping("/{idProduct}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable("idProduct") Integer idProduct) throws Exception {
+    public ResponseEntity<ProductRequest> getProductById(
+        @PathVariable("idProduct") Integer idProduct) throws Exception {
         Product product = productService.listById(idProduct);
         if (product == null) {
-            throw new ModelNotFoundException("ID NOT FOUND " + idProduct);
+            throw new ModelNotFoundException(ID_NOT_FOUND + idProduct);
         }
-        return new ResponseEntity<>(mapper.map(product, ProductDTO.class), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(product, ProductRequest.class));
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) throws Exception {
+    public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductRequest productDTO)
+        throws Exception {
         Product product = mapper.map(productDTO, Product.class);
-        return new ResponseEntity<>(mapper.map(productService.save(product), ProductDTO.class), HttpStatus.CREATED);
+        Product savedProduct = productService.save(product);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(mapper.map(savedProduct, ProductDTO.class));
     }
 
     @PutMapping("/{idProduct}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("idProduct") Integer idProduct,@RequestBody ProductDTO productDTO) throws Exception {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("idProduct") Integer idProduct,
+        @RequestBody ProductRequest productDTO) throws Exception {
         Product product = productService.listById(idProduct);
         if (product == null) {
-            throw new ModelNotFoundException("ID NOT FOUND " + productDTO.getId());
+            throw new ModelNotFoundException(ID_NOT_FOUND + productDTO.getId());
         }
         productDTO.setId(product.getId());
-        Product newProduct = mapper.map((productDTO), Product.class);
-        return new ResponseEntity<>(mapper.map(productService.update(newProduct), ProductDTO.class), HttpStatus.OK);
+        Product newProduct = mapper.map(productDTO, Product.class);
+        Product updatedProduct = productService.update(newProduct);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(mapper.map(updatedProduct, ProductDTO.class));
     }
 
     @DeleteMapping("/{idProduct}")
-    public ResponseEntity<Void> deleteProductById(@PathVariable("idProduct") Integer idProduct) throws Exception {
+    public ResponseEntity<Void> deleteProductById(@PathVariable("idProduct") Integer idProduct)
+        throws Exception {
         Product product = productService.listById(idProduct);
         if (product == null) {
-            throw new ModelNotFoundException("ID NOT FOUND " + idProduct);
+            throw new ModelNotFoundException(ID_NOT_FOUND + idProduct);
         }
         productService.delete(idProduct);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

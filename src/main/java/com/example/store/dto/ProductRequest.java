@@ -1,13 +1,13 @@
 package com.example.store.dto;
 
-import java.math.BigDecimal;
 import lombok.Data;
 
+import java.math.BigDecimal;
 @Data
-public class ProductDTO {
+public class ProductRequest {
     private Integer id;
     private String description;
     private BigDecimal price;
-    private String weight;
-
+    private Long weight;
+    private Long quantity;
 }
